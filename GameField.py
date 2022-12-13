@@ -67,19 +67,18 @@ class GameField:
     def grey_out_area_around(self, row: int, column: int):
         for i in range(-1, 1 + 1):
             for j in range(-1, 1 + 1):
-                try:
-                    if self.get_cell(row + i, column + j).state == 'EMPTY':
-                        self.change_cell_state(row + i, column + j, 'MISSED')
-                except:
+                if not Cell.is_in_bounds(row + i, column + j):
                     continue
+                if self.get_cell(row + i, column + j).state == 'EMPTY':
+                    self.change_cell_state(row + i, column + j, 'MISSED')
 
     def create_visible_field(self) -> list[list[Cell]]:
-        f = [[None for _ in range(10)] for _ in range(10)]
+        f = [[Cell() for _ in range(10)] for _ in range(10)]
 
         for row in range(10):
             for col in range(10):
                 real_state = self.get_cell(row, col).state
-                f[row][col] = Cell(real_state if real_state in ['SHIP_HIT', 'SHIP_PARTLY_HIT', 'MISSED'] else 'EMPTY')
+                f[row][col].state = real_state if real_state in ['SHIP_HIT', 'SHIP_PARTLY_HIT', 'MISSED'] else 'EMPTY'
 
         return f
 

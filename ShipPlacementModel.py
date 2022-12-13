@@ -84,20 +84,20 @@ class ShipPlacementModel:
 
     def try_remove_ship(self, row: int, column: int):
         self.try_remove_ship_part(row, column)
-        if self.removed_parts == 0:
+        if self._removed_parts == 0:
             return
 
-        self.current_ships_placed[self.removed_parts - 1] -= 1
-        self.removed_parts = 0
+        self.current_ships_placed[self._removed_parts - 1] -= 1
+        self._removed_parts = 0
 
-    removed_parts = 0
+    _removed_parts = 0
 
     def try_remove_ship_part(self, row: int, column: int):
         if not Cell.is_in_bounds(row, column) or self.field[row][column].state != 'SHIP_PART':
             return
 
         self.field[row][column].change_state('EMPTY')
-        self.removed_parts += 1
+        self._removed_parts += 1
 
         self.try_remove_ship_part(row + 1, column)
         self.try_remove_ship_part(row - 1, column)
