@@ -1,5 +1,4 @@
 import socket
-from server import PORT
 
 
 class Network:
@@ -7,10 +6,10 @@ class Network:
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect(self, ip):
-        self.s.connect((ip, PORT))
+        self.s.connect((ip, 1237))
 
     def send_my_field(self, field: str):
-        self.s.send(bytes(field))
+        self.s.send(bytes(field, "utf-8"))
 
     def get_opponent_field(self) -> str:
         return self.s.recv(2048).decode()

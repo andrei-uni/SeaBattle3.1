@@ -1,10 +1,8 @@
 import socket
 
-PORT = 1237
-
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((socket.gethostname(), PORT))
+s.bind((socket.gethostname(), 1237))
 s.listen(5)
 
 player1_socket, address = s.accept()

@@ -115,7 +115,7 @@ class Application:
         start_server_btn.place(x=self.SCREEN_WIDTH / 2, y=9 * height + 17 * vert_pad, height=height)
         self.start_server_button = start_server_btn
 
-        connect_to_server_btn = Button(text="Подключиться к серверу", relief=RAISED, command=self.connect_to_server)
+        connect_to_server_btn = Button(text="Подключиться к серверу", relief=RAISED, state=DISABLED, command=self.connect_to_server)
         connect_to_server_btn.place(x=self.SCREEN_WIDTH / 2 + 120, y=9 * height + 17 * vert_pad, height=height)
         self.connect_to_server_button = connect_to_server_btn
 
@@ -136,18 +136,24 @@ class Application:
 
         self.started_server = True
         self.start_server_button.config(state=DISABLED)
+        self.connect_to_server_button.config(state=DISABLED)
 
         threading.Thread(target=lambda: os.system("server.py 1")).start()
         time.sleep(2)
+
         ip = socket.gethostbyname(socket.gethostname())
         self.network.connect(ip)
+        self.network.send_my_field(self.ship_placement_model.convert_to_string())
 
     def connect_to_server(self):
-        ip = self.server_ip_entry.get()
+        ip = self.server_ip_entry.get().strip()
         ip_regex = r"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$"
         if not re.fullmatch(ip_regex, ip):
             messagebox.showerror("Ошибка!", "Введите верный ip-адрес")
             return
+
+        self.network.connect(ip)
+        self.network.send_my_field(self.ship_placement_model.convert_to_string())
 
     def choose_ship_pressed(self, row: int):
         if self.ship_placement_model.is_remove_ship_mode:
@@ -184,6 +190,7 @@ class Application:
         self.update_labels()
         self.update_start_button()
         self.update_start_server_button()
+        self.update_connect_server_button()
 
     def redraw_field(self):
         new_field = self.ship_placement_model.get_field()
@@ -205,6 +212,11 @@ class Application:
         if self.started_server:
             return
         self.start_server_button.config(state=ACTIVE if self.ship_placement_model.all_ships_placed() else DISABLED)
+
+    def update_connect_server_button(self):
+        if self.started_server:
+            return
+        self.connect_to_server_button.config(state=ACTIVE if self.ship_placement_model.all_ships_placed() else DISABLED)
 
     def ships_left_template(self, count: int) -> str:
         return f"{count} осталось"
