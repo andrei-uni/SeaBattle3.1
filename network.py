@@ -3,18 +3,17 @@ from server import PORT
 
 
 class Network:
-    def __init__(self, ip: str):
+    def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.addr = (ip, PORT)
 
-    def connect(self):
-        self.s.connect(self.addr)
-
-    def get_opponent_field(self) -> str:
-        return self.s.recv(2048).decode()
+    def connect(self, ip):
+        self.s.connect((ip, PORT))
 
     def send_my_field(self, field: str):
         self.s.send(bytes(field))
+
+    def get_opponent_field(self) -> str:
+        return self.s.recv(2048).decode()
 
     def send(self, data: str) -> str:
         try:

@@ -4,6 +4,7 @@ import os
 import time
 import sys
 import threading
+import socket
 from functools import partial
 
 from tkinter import *
@@ -13,6 +14,7 @@ from Cell import Cell
 from ShipPlacementModel import ShipPlacementModel
 from GameModel import GameModel
 from RandomShipPlacement import RandomShipPlacement
+from network import Network
 
 
 class Application:
@@ -44,6 +46,7 @@ class Application:
         self.game_model = None
 
         self.started_server = False
+        self.network = Network()
 
         self.create_button_field()
         self.create_buttons()
@@ -136,6 +139,8 @@ class Application:
 
         threading.Thread(target=lambda: os.system("server.py 1")).start()
         time.sleep(2)
+        ip = socket.gethostbyname(socket.gethostname())
+        self.network.connect(ip)
 
     def connect_to_server(self):
         ip = self.server_ip_entry.get()
