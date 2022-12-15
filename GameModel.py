@@ -4,7 +4,7 @@ from GameField import GameField
 
 
 class GameModel:
-    _total_hit_cells_for_win = 4 + 2*3 + 3*2 + 4*1
+    _TOTAL_HIT_CELLS_FOR_WIN = 1 * 4 + 2 * 3 + 3 * 2 + 4 * 1
 
     def __init__(self, my_field: list[list[Cell]], opponent_field: list[list[Cell]]):
         self.my_field = GameField(my_field)
@@ -26,7 +26,7 @@ class GameModel:
                 if cell_state == 'SHIP_HIT':
                     hit_count += 1
 
-        return hit_count == self._total_hit_cells_for_win
+        return hit_count == self._TOTAL_HIT_CELLS_FOR_WIN
 
     def make_shot(self, row: int, column: int, game_field: GameField = None) -> list[list[Cell]]:
         player_shoots = game_field is None

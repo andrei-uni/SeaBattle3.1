@@ -1,7 +1,7 @@
 import platform
 import re
 import os
-import socket
+import time
 import sys
 import threading
 from functools import partial
@@ -108,7 +108,7 @@ class Application:
         start_game_btn.place(x=self.SCREEN_WIDTH / 2, y=8 * height + 13 * vert_pad, height=height)
         self.start_game_button = start_game_btn
 
-        start_server_btn = Button(text="Запустить сервер", relief=RAISED, state=DISABLED, command=self.start_server)
+        start_server_btn = Button(text="Запустить сервер", relief=RAISED, state=DISABLED, command=self.start_server_pressed)
         start_server_btn.place(x=self.SCREEN_WIDTH / 2, y=9 * height + 17 * vert_pad, height=height)
         self.start_server_button = start_server_btn
 
@@ -127,14 +127,15 @@ class Application:
         close_app_btn = Button(text="Выйти", command=self.close_app)
         close_app_btn.place(x=0, y=self.root.winfo_screenheight() - height, height=height)
 
-    def start_server(self):
+    def start_server_pressed(self):
         if self.started_server:
             return
+
         self.started_server = True
+        self.start_server_button.config(state=DISABLED)
 
         threading.Thread(target=lambda: os.system("server.py 1")).start()
-
-        self.start_server_button.config(state=DISABLED)
+        time.sleep(2)
 
     def connect_to_server(self):
         ip = self.server_ip_entry.get()

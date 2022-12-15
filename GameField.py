@@ -89,3 +89,22 @@ class GameField:
         if not Cell.is_in_bounds(row, column):
             raise Exception()
         return self.field[row][column]
+
+    def convert_to_string(self) -> str:
+        coords = []
+        for r in range(10):
+            for c in range(10):
+                cell = self.field[r][c]
+                if cell.state == 'SHIP_PART':
+                    coords.append(f"{r},{c}")
+        return ";".join(coords)
+
+    @staticmethod
+    def convert_to_gamefield(string: str):
+        field = [[Cell() for _ in range(10)] for _ in range(10)]
+        for coord in string.split(";"):
+            coords = coord.split(",")
+            r = int(coords[0])
+            c = int(coords[1])
+            field[r][c].change_state("SHIP_PART")
+        return GameField(field)
