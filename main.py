@@ -80,9 +80,9 @@ class Application:
         vert_pad = 5
         hor_pad = 5
 
-        place_rand_btn = Button(text="🎲 Случайная расстановка", relief=GROOVE, command=self.place_randomly_pressed)
-        place_rand_btn.place(x=self.SCREEN_WIDTH / 2, height=height)
-        self.place_ships_randomly_button = place_rand_btn
+        self.place_ships_randomly_button = Button(text="🎲 Случайная расстановка", relief=GROOVE,
+                                                  command=self.place_randomly_pressed)
+        self.place_ships_randomly_button.place(x=self.SCREEN_WIDTH / 2, height=height)
 
         for row in range(4):
             place_btn = Button(text=f"{row + 1} пал.", relief=GROOVE, command=partial(self.choose_ship_pressed, row))
@@ -95,37 +95,31 @@ class Application:
                         y=(row + 1) * height + (row + 1) * vert_pad, height=height)
             self.ships_left_to_place_labels[row] = label
 
-        rotate_btn = Button(text="⭮ Повернуть", relief=RAISED, command=self.rotate_ship_pressed)
-        rotate_btn.place(x=self.SCREEN_WIDTH / 2, y=5 * height + 4 * vert_pad, height=height)
-        self.rotate_ship_button = rotate_btn
+        self.rotate_ship_button = Button(text="⭮ Повернуть", relief=RAISED, command=self.rotate_ship_pressed)
+        self.rotate_ship_button.place(x=self.SCREEN_WIDTH / 2, y=5 * height + 4 * vert_pad, height=height)
 
-        remove_btn = Button(text="╳ Убрать", relief=RAISED, command=self.remove_ship_pressed)
-        remove_btn.place(x=self.SCREEN_WIDTH / 2, y=6 * height + 5 * vert_pad, height=height)
-        self.remove_ship_button = remove_btn
+        self.remove_ship_button = Button(text="╳ Убрать", relief=RAISED, command=self.remove_ship_pressed)
+        self.remove_ship_button.place(x=self.SCREEN_WIDTH / 2, y=6 * height + 5 * vert_pad, height=height)
 
-        remove_all_btn = Button(text="❌ Очистить", relief=GROOVE, command=self.remove_all_ships_pressed)
-        remove_all_btn.place(x=self.SCREEN_WIDTH / 2, y=7 * height + 9 * vert_pad, height=height)
-        self.remove_all_ships_button = remove_all_btn
+        self.remove_all_ships_button = Button(text="❌ Очистить", relief=GROOVE, command=self.remove_all_ships_pressed)
+        self.remove_all_ships_button.place(x=self.SCREEN_WIDTH / 2, y=7 * height + 9 * vert_pad, height=height)
 
-        start_game_btn = Button(text="💣 Начать", relief=GROOVE, state=DISABLED, command=self.start_game)
-        start_game_btn.place(x=self.SCREEN_WIDTH / 2, y=8 * height + 13 * vert_pad, height=height)
-        self.start_game_button = start_game_btn
+        self.start_game_button = Button(text="💣 Начать", relief=GROOVE, state=DISABLED, command=self.start_game)
+        self.start_game_button.place(x=self.SCREEN_WIDTH / 2, y=8 * height + 13 * vert_pad, height=height)
 
-        start_server_btn = Button(text="Запустить сервер", relief=RAISED, state=DISABLED, command=self.start_server_pressed)
-        start_server_btn.place(x=self.SCREEN_WIDTH / 2, y=9 * height + 17 * vert_pad, height=height)
-        self.start_server_button = start_server_btn
+        self.start_server_button = Button(text="Запустить сервер", relief=RAISED, state=DISABLED,
+                                          command=self.start_server_pressed)
+        self.start_server_button.place(x=self.SCREEN_WIDTH / 2, y=9 * height + 17 * vert_pad, height=height)
 
-        connect_to_server_btn = Button(text="Подключиться к серверу", relief=RAISED, state=DISABLED, command=self.connect_to_server)
-        connect_to_server_btn.place(x=self.SCREEN_WIDTH / 2 + 120, y=9 * height + 17 * vert_pad, height=height)
-        self.connect_to_server_button = connect_to_server_btn
+        self.connect_to_server_button = Button(text="Подключиться к серверу", relief=RAISED, state=DISABLED,
+                                               command=self.connect_to_server)
+        self.connect_to_server_button.place(x=self.SCREEN_WIDTH / 2, y=10 * height + 17 * vert_pad, height=height)
 
-        server_ip_label = Label(text="Подключиться к серверу (введите ip)")
-        server_ip_label.place(x=self.SCREEN_WIDTH / 2, y=10.5 * height + 17 * vert_pad)
-        self.server_ip_label = server_ip_label
+        self.server_ip_label = Label(text="Подключиться к серверу (введите ip)")
+        self.server_ip_label.place(x=self.SCREEN_WIDTH / 2, y=11.5 * height + 17 * vert_pad)
 
-        server_ip_entry = Entry()
-        server_ip_entry.place(x=self.SCREEN_WIDTH / 2, y=10.5 * height + 21 * vert_pad)
-        self.server_ip_entry = server_ip_entry
+        self.server_ip_entry = Entry()
+        self.server_ip_entry.place(x=self.SCREEN_WIDTH / 2, y=11.5 * height + 21 * vert_pad)
 
         close_app_btn = Button(text="Выйти", command=self.close_app)
         close_app_btn.place(x=0, y=self.root.winfo_screenheight() - height, height=height)
@@ -138,7 +132,7 @@ class Application:
         self.start_server_button.config(state=DISABLED)
         self.connect_to_server_button.config(state=DISABLED)
 
-        threading.Thread(target=lambda: os.system("server.py 1")).start()
+        threading.Thread(target=lambda: exec(open("server.py").read())).start()
         time.sleep(2)
 
         ip = socket.gethostbyname(socket.gethostname())
@@ -303,7 +297,6 @@ class Application:
 if __name__ == '__main__':
     if platform.system() == "Windows":
         from ctypes import windll
-
         windll.shcore.SetProcessDpiAwareness(1)
 
     Application().run()

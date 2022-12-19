@@ -9,14 +9,14 @@ class Network:
         self.s.connect((ip, 1237))
 
     def send_my_field(self, field: str):
-        self.s.send(bytes(field, "utf-8"))
+        self.s.send(str.encode(field))
 
     def get_opponent_field(self) -> str:
         return self.s.recv(2048).decode()
 
     def send(self, data: str) -> str:
         try:
-            self.s.send(bytes(data))
+            self.s.send(str.encode(data))
             reply = self.s.recv(2048).decode()
             return reply
         except socket.error as e:
