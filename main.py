@@ -273,6 +273,8 @@ class Application:
                 self.opponent_field[row][column] = btn
 
     def opponent_field_button_pressed(self, row: int, column: int):
+        if not self.game_model.is_player_turn:
+            return
         new_field = self.game_model.make_shot(row, column)
         self.redraw_opponent_field(new_field)
 
@@ -281,7 +283,7 @@ class Application:
             self.restart_app()
             return
 
-        self.opponent_make_moves()
+        threading.Thread(target=self.opponent_make_moves).start()
 
     def opponent_make_moves(self):
         while not self.game_model.is_player_turn:
