@@ -20,6 +20,22 @@ player2_socket.send(player1_field)
 
 player1_turn = True
 
-# while True:
-#     if player1_turn:
 
+def did_hit(data: bytes) -> bool:
+    return data.decode() == "HIT"
+
+
+while True:
+    while player1_turn:
+        coords = player1_socket.recv(2048)
+        player2_socket.send(coords)
+        res = player1_socket.recv(2048)
+        if not did_hit(res):
+            player1_turn = False
+
+    while not player1_turn:
+        coords = player2_socket.recv(2048)
+        player1_socket.send(coords)
+        res = player2_socket.recv(2048)
+        if not did_hit(res):
+            player1_turn = True

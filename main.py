@@ -5,14 +5,16 @@ import time
 import sys
 import threading
 import socket
+import tkinter
 from functools import partial
 
 from tkinter import *
 from tkinter import messagebox
 
 from Cell import Cell
+from GameField import GameField
 from ShipPlacementModel import ShipPlacementModel
-from GameModel import GameModel
+from GameModelOffline import GameModelOffline, GameModelOnline
 from RandomShipPlacement import RandomShipPlacement
 from network import Network
 
@@ -46,6 +48,7 @@ class Application:
         self.game_model = None
 
         self.started_server = False
+        self.connected_to_server = False
         self.network = Network()
 
         self.create_button_field()
@@ -136,6 +139,7 @@ class Application:
         time.sleep(2)
 
         ip = socket.gethostbyname(socket.gethostname())
+        print(ip)
         self.network.connect(ip)
         self.network.send_my_field(self.ship_placement_model.convert_to_string())
 
@@ -146,6 +150,7 @@ class Application:
             messagebox.showerror("Ошибка!", "Введите верный ip-адрес")
             return
 
+        self.connected_to_server = True
         self.network.connect(ip)
         self.network.send_my_field(self.ship_placement_model.convert_to_string())
 
@@ -220,7 +225,12 @@ class Application:
         self.disable_my_field()
         self.create_opponent_field()
 
-        self.game_model = GameModel(self.ship_placement_model.field, RandomShipPlacement().place())
+        if self.started_server or self.connected_to_server:
+            self.game_model = GameModelOnline(GameField(self.ship_placement_model.field), self.network.get_opponent_field(), self.started_server, self.network)
+            self.opponent_make_moves()
+            return
+
+        self.game_model = GameModelOffline(GameField(self.ship_placement_model.field), GameField(RandomShipPlacement().place()))
 
     def remove_buttons(self):
         for i in range(4):
@@ -267,11 +277,11 @@ class Application:
             self.restart_app()
             return
 
-        self.bot_make_moves()
+        self.opponent_make_moves()
 
-    def bot_make_moves(self):
+    def opponent_make_moves(self):
         while not self.game_model.is_player_turn:
-            self.game_model.bot_make_shot()
+            self.game_model.opponent_make_shot()
             self.redraw_field()
 
             if self.game_model.is_opponent_win():
