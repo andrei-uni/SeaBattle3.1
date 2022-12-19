@@ -137,7 +137,7 @@ class ShipPlacementModel:
     def get_field(self) -> list[list[Cell]]:
         return self.field
 
-    def convert_to_string(self) -> str:
+    def to_string(self) -> str:
         coords = []
         for r in range(10):
             for c in range(10):
@@ -145,3 +145,6 @@ class ShipPlacementModel:
                 if cell.state == 'SHIP_PART':
                     coords.append(f"{r},{c}")
         return ";".join(coords)
+
+    def to_gamefield(self) -> GameField:
+        return GameField(self.field)

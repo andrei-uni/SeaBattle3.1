@@ -141,7 +141,9 @@ class Application:
         ip = socket.gethostbyname(socket.gethostname())
         print(ip)
         self.network.connect(ip)
-        self.network.send_my_field(self.ship_placement_model.convert_to_string())
+        self.network.send_my_field(self.ship_placement_model.to_string())
+
+        self.start_game()
 
     def connect_to_server(self):
         ip = self.server_ip_entry.get().strip()
@@ -152,7 +154,9 @@ class Application:
 
         self.connected_to_server = True
         self.network.connect(ip)
-        self.network.send_my_field(self.ship_placement_model.convert_to_string())
+        self.network.send_my_field(self.ship_placement_model.to_string())
+
+        self.start_game()
 
     def choose_ship_pressed(self, row: int):
         if self.ship_placement_model.is_remove_ship_mode:
@@ -226,11 +230,11 @@ class Application:
         self.create_opponent_field()
 
         if self.started_server or self.connected_to_server:
-            self.game_model = GameModelOnline(GameField(self.ship_placement_model.field), self.network.get_opponent_field(), self.started_server, self.network)
+            self.game_model = GameModelOnline(self.ship_placement_model.to_gamefield(), self.network.get_opponent_field(), self.started_server, self.network)
             self.opponent_make_moves()
             return
 
-        self.game_model = GameModelOffline(GameField(self.ship_placement_model.field), GameField(RandomShipPlacement().place()))
+        self.game_model = GameModelOffline(self.ship_placement_model.to_gamefield(), GameField(RandomShipPlacement().place()))
 
     def remove_buttons(self):
         for i in range(4):
