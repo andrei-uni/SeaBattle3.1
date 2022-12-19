@@ -1,3 +1,4 @@
+import json
 import platform
 import re
 import os
@@ -5,6 +6,7 @@ import time
 import sys
 import threading
 import socket
+import urllib
 from functools import partial
 
 from tkinter import *
@@ -141,8 +143,6 @@ class Application:
         ip = socket.gethostbyname(socket.gethostname())
         self.network.connect(ip)
         self.network.send_my_field(self.ship_placement_model.to_string())
-
-        messagebox.showinfo("IP-адрес", f"Ваш ip-адрес: {ip}. Покажите его вашему оппоненту, чтобы он смог подключиться.")
         self.start_game()
 
     def connect_to_server(self):
@@ -152,8 +152,13 @@ class Application:
             messagebox.showerror("Ошибка!", "Введите верный ip-адрес")
             return
 
+        try:
+            self.network.connect(ip)
+        except:
+            messagebox.showerror("Ошибка", "Не удается установить соединение с сервером.")
+            return
+
         self.connected_to_server = True
-        self.network.connect(ip)
         self.network.send_my_field(self.ship_placement_model.to_string())
 
         self.start_game()
