@@ -1,7 +1,7 @@
 import socket
 
-from Coord import Coord
-from GameField import GameField
+from coord import Coord
+from game_field import GameField
 
 
 class Network:
@@ -15,7 +15,7 @@ class Network:
         self.s.send(str.encode(field))
 
     def get_opponent_field(self) -> GameField:
-        return GameField.convert_to_gamefield(self.s.recv(2048).decode())
+        return GameField.convert_to_gamefield(self.s.recv(512).decode())
 
     def send_hit_ship(self, did_hit_ship: bool):
         self.s.send(str.encode("HIT" if did_hit_ship else "MISS"))
@@ -24,7 +24,7 @@ class Network:
         self.s.send(str.encode(f"{coord.row},{coord.column}"))
 
     def receive_move_coord(self) -> Coord:
-        data = self.s.recv(2048).decode().split(",")
+        data = self.s.recv(512).decode().split(",")
         r = int(data[0])
         c = int(data[1])
         return Coord(r, c)

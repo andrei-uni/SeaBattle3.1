@@ -5,17 +5,17 @@ import time
 import sys
 import threading
 import socket
-import tkinter
 from functools import partial
 
 from tkinter import *
 from tkinter import messagebox
 
-from Cell import Cell
-from GameField import GameField
-from ShipPlacementModel import ShipPlacementModel
-from GameModelOffline import GameModelOffline, GameModelOnline
-from RandomShipPlacement import RandomShipPlacement
+from cell import Cell
+from game_field import GameField
+from ship_placement.ship_placement_model import ShipPlacementModel
+from ship_placement.random_ship_placement import RandomShipPlacement
+from game_model.game_model_offline import GameModelOffline
+from game_model.game_model_online import GameModelOnline
 from network import Network
 
 
@@ -104,7 +104,7 @@ class Application:
         self.remove_ship_button = Button(text="╳ Убрать", relief=RAISED, command=self.remove_ship_pressed)
         self.remove_ship_button.place(x=self.SCREEN_WIDTH / 2, y=6 * height + 5 * vert_pad, height=height)
 
-        self.remove_all_ships_button = Button(text="❌ Очистить", relief=GROOVE, command=self.remove_all_ships_pressed)
+        self.remove_all_ships_button = Button(text="❌ Очистить поле", relief=GROOVE, command=self.remove_all_ships_pressed)
         self.remove_all_ships_button.place(x=self.SCREEN_WIDTH / 2, y=7 * height + 9 * vert_pad, height=height)
 
         self.start_game_button = Button(text="💣 Начать", relief=GROOVE, state=DISABLED, command=self.start_game)
@@ -139,10 +139,10 @@ class Application:
         time.sleep(2)
 
         ip = socket.gethostbyname(socket.gethostname())
-        print(ip)
         self.network.connect(ip)
         self.network.send_my_field(self.ship_placement_model.to_string())
 
+        messagebox.showinfo("IP-адрес", f"Ваш ip-адрес: {ip}. Покажите его вашему оппоненту, чтобы он смог подключиться.")
         self.start_game()
 
     def connect_to_server(self):
@@ -230,11 +230,13 @@ class Application:
         self.create_opponent_field()
 
         if self.started_server or self.connected_to_server:
-            self.game_model = GameModelOnline(self.ship_placement_model.to_gamefield(), self.network.get_opponent_field(), self.started_server, self.network)
+            self.game_model = GameModelOnline(self.ship_placement_model.to_gamefield(),
+                                              self.network.get_opponent_field(), self.started_server, self.network)
             self.opponent_make_moves()
             return
 
-        self.game_model = GameModelOffline(self.ship_placement_model.to_gamefield(), GameField(RandomShipPlacement().place()))
+        self.game_model = GameModelOffline(self.ship_placement_model.to_gamefield(),
+                                           GameField(RandomShipPlacement().place()))
 
     def remove_buttons(self):
         for i in range(4):

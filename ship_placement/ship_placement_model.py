@@ -1,8 +1,8 @@
 from copy import deepcopy
 
-from Cell import Cell
-from GameField import GameField
-from RandomShipPlacement import RandomShipPlacement
+from cell import Cell
+from game_field import GameField
+from ship_placement.random_ship_placement import RandomShipPlacement
 
 
 class ShipPlacementModel:
@@ -32,7 +32,7 @@ class ShipPlacementModel:
             row_offset = i if not self.is_ship_rotated else 0
             column_offset = i if self.is_ship_rotated else 0
 
-            if self.is_ship_in_vicinity(row + row_offset, column + column_offset) or \
+            if self.is_ship_nearby(row + row_offset, column + column_offset) or \
                     self.current_ships_placed[self.current_ship_type] == 4 - self.current_ship_type:
                 state = 'CANT_PLACE'
             else:
@@ -49,7 +49,7 @@ class ShipPlacementModel:
 
         self.field = deepcopy(self.previous_field)
 
-    def is_ship_in_vicinity(self, row: int, column: int) -> bool:
+    def is_ship_nearby(self, row: int, column: int) -> bool:
         temp_field = self.create_temp_field()
         adjusted_row = row + 1
         adjusted_column = column + 1
