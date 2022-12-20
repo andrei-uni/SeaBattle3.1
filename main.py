@@ -103,7 +103,8 @@ class Application:
         self.remove_ship_button = Button(text="╳ Убрать", relief=RAISED, command=self.remove_ship_pressed)
         self.remove_ship_button.place(x=self.SCREEN_WIDTH / 2, y=6 * height + 5 * vert_pad, height=height)
 
-        self.remove_all_ships_button = Button(text="❌ Очистить поле", relief=GROOVE, command=self.remove_all_ships_pressed)
+        self.remove_all_ships_button = Button(text="❌ Очистить поле", relief=GROOVE,
+                                              command=self.remove_all_ships_pressed)
         self.remove_all_ships_button.place(x=self.SCREEN_WIDTH / 2, y=7 * height + 9 * vert_pad, height=height)
 
         self.start_game_button = Button(text="💣 Начать", relief=GROOVE, state=DISABLED, command=self.start_game)
@@ -318,6 +319,7 @@ class Application:
 if __name__ == '__main__':
     if platform.system() == "Windows":
         from ctypes import windll
+
         windll.shcore.SetProcessDpiAwareness(1)
 
     Application().run()
