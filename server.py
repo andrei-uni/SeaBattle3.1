@@ -2,7 +2,7 @@ import socket
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('', 1237))
+s.bind((socket.gethostname(), 1237))
 s.listen(5)
 
 player1_socket, adr = s.accept()
