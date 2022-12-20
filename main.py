@@ -143,6 +143,7 @@ class Application:
         ip = socket.gethostbyname(socket.gethostname())
         self.network.connect(ip)
         self.network.send_my_field(self.ship_placement_model.to_string())
+        messagebox.showinfo("IP-адрес", f"Ваш ip-адрес: {ip}")
         self.start_game()
 
     def connect_to_server(self):
