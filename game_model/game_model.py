@@ -1,4 +1,4 @@
-from game_field import GameField
+from field.game_field import GameField
 
 
 class GameModel:

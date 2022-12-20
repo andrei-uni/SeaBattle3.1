@@ -1,8 +1,8 @@
 import time
 
 from bot import Bot
-from cell import Cell
-from game_field import GameField
+from field.cell import Cell
+from field.game_field import GameField
 from game_model.game_model import GameModel
 
 

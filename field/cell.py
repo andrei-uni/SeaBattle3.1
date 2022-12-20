@@ -11,7 +11,7 @@ class Cell:
         'CANT_PLACE':      'red',
         'SHIP_HIT':        'red',
         'SHIP_PARTLY_HIT': 'red',
-        'MISSED':          'grey62'
+        'MISSED':          'grey66'
     }
 
     def __init__(self, state: POSSIBLE_STATES = 'EMPTY'):

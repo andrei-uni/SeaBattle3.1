@@ -1,6 +1,6 @@
 from random import randint, random
 
-from cell import Cell
+from field.cell import Cell
 
 
 class RandomShipPlacement:

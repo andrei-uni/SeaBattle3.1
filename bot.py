@@ -1,7 +1,7 @@
 from random import choice
 
-from cell import Cell
-from coord import Coord
+from field.cell import Cell
+from field.coord import Coord
 
 
 class Bot:

@@ -1,8 +1,8 @@
-from cell import Cell
-from coord import Coord
-from game_field import GameField
+from field.cell import Cell
+from field.coord import Coord
+from field.game_field import GameField
 from game_model.game_model import GameModel
-from network import Network
+from networking.network import Network
 
 
 class GameModelOnline(GameModel):

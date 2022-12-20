@@ -1,24 +1,21 @@
-import json
+import os
 import platform
 import re
-import os
-import time
+import socket
 import sys
 import threading
-import socket
-import urllib
+import time
 from functools import partial
-
 from tkinter import *
 from tkinter import messagebox
 
-from cell import Cell
-from game_field import GameField
-from ship_placement.ship_placement_model import ShipPlacementModel
-from ship_placement.random_ship_placement import RandomShipPlacement
+from field.cell import Cell
+from field.game_field import GameField
 from game_model.game_model_offline import GameModelOffline
 from game_model.game_model_online import GameModelOnline
-from network import Network
+from networking.network import Network
+from ship_placement.random_ship_placement import RandomShipPlacement
+from ship_placement.ship_placement_model import ShipPlacementModel
 
 
 class Application:
@@ -137,7 +134,7 @@ class Application:
         self.start_server_button.config(state=DISABLED)
         self.connect_to_server_button.config(state=DISABLED)
 
-        threading.Thread(target=lambda: exec(open("server.py").read())).start()
+        threading.Thread(target=lambda: exec(open("networking/server.py").read())).start()
         time.sleep(2)
 
         ip = socket.gethostbyname(socket.gethostname())

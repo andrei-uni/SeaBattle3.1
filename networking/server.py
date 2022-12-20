@@ -3,15 +3,13 @@ import socket
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((socket.gethostname(), 1237))
-s.listen(5)
+s.listen(2)
 
-player1_socket, adr = s.accept()
+player1_socket, _ = s.accept()
 player1_field = player1_socket.recv(512)
-print(f"From {adr}")
 
-player2_socket, adr = s.accept()
+player2_socket, _ = s.accept()
 player2_field = player2_socket.recv(512)
-print(f"From {adr}")
 
 player1_socket.send(player2_field)
 player2_socket.send(player1_field)

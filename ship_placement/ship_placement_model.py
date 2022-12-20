@@ -1,7 +1,7 @@
 from copy import deepcopy
 
-from cell import Cell
-from game_field import GameField
+from field.cell import Cell
+from field.game_field import GameField
 from ship_placement.random_ship_placement import RandomShipPlacement
 
 

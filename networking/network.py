@@ -1,7 +1,7 @@
 import socket
 
-from coord import Coord
-from game_field import GameField
+from field.coord import Coord
+from field.game_field import GameField
 
 
 class Network:
